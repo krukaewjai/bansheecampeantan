@@ -3,75 +3,164 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>เกมบัญชีคำพื้นฐาน ป.4</title>
+    <title>เกมบัญชีคำพื้นฐาน สำหรับนักเรียนประถมศึกษาปีที่ 4</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap');
-        body { 
-            font-family: 'Sarabun', sans-serif; 
-            color: #333; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            height: 100vh; 
-            margin: 0; 
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9; 
+            --correct-color: #27ae60;
+            --incorrect-color: #e74c3c;
+            --bg-light: #ecf0f1;
+            --text-dark: #2c3e50;
+        }
+        html, body {
+            height: 100%;
+            overflow: hidden; /* ป้องกันการเลื่อนหน้าจอ */
+            margin: 0;
+        }
+        body {
+            font-family: 'Sarabun', sans-serif;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
             user-select: none;
-            background-image: url('https://lh5.googleusercontent.com/d/1p28Ss160fZWFSe67QLrgHvPcZgN4bgAZ');
+            background-image: url('https://lh5.googleusercontent.com/d/1p28Ss160fZWFSe67QLrgHvPcZgN4bgAZ'); /* เปลี่ยนเป็นลิงก์พื้นหลังที่ไม่หมดอายุ */
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
-        #game-container { width: 90%; max-width: 800px; background-color: rgba(255, 255, 255, 0.95); padding: 25px; border-radius: 15px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); text-align: center; }
-        h1 { color: #0056b3; }
-        #game-info { display: flex; justify-content: space-around; align-items: center; font-size: 1.5em; margin-bottom: 20px; font-weight: bold; }
-        #hearts span, #timer span { margin-left: 10px; }
-        #hearts { color: #e74c3c; }
+        #game-container { 
+            width: 95%; 
+            max-width: 1100px;
+            background-color: rgba(255, 255, 255, 0.98); 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2); 
+            text-align: center; 
+        }
+        h1 { color: #0056b3; font-size: 2.2em; margin: 10px 0; }
+        h2 { font-size: 1.1em; margin: 10px 0; }
+        #game-info { display: flex; justify-content: space-around; align-items: center; font-size: 1.4em; margin-bottom: 10px; font-weight: bold; flex-wrap: wrap; }
+        #hearts { color: var(--incorrect-color); }
         #timer { color: #f39c12; }
-        #score { color: #2ecc71; }
-        #question-area { background-color: #eef5ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
-        #letters-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; min-height: 50px; }
-        #answer-box { display: flex; justify-content: space-between; align-items: center; min-height: 70px; background-color: #ecf0f1; padding: 10px 20px; border-radius: 10px; border: 2px solid #bdc3c7; font-size: 2.5em; font-weight: bold; color: #2c3e50; }
-        #answer-text { flex-grow: 1; text-align: center; }
-        .letter-btn { width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; font-size: 2em; background-color: #3498db; color: white; border-radius: 8px; cursor: pointer; transition: background-color 0.2s, transform 0.2s; border: none; font-family: 'Sarabun', sans-serif; }
-        .letter-btn:hover { background-color: #2980b9; transform: scale(1.05); }
-        .letter-btn:disabled { background-color: #bdc3c7; cursor: not-allowed; opacity: 0.5; }
-        .button-container { margin-top: 20px; display: flex; justify-content: center; gap: 15px; }
+        #score { color: var(--correct-color); }
+        #question-area { background-color: #eef5ff; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
+        #answer-box { 
+            display: flex; 
+            align-items: center; 
+            min-height: 60px; 
+            background-color: var(--bg-light); 
+            padding: 5px 10px; 
+            border-radius: 10px; 
+            border: 2px solid #bdc3c7; 
+            margin-bottom: 10px;
+        }
+        #answer-text { 
+            flex-grow: 1; 
+            text-align: center; 
+            font-size: 2em; 
+            font-weight: bold; 
+            color: var(--text-dark); 
+            letter-spacing: 2px;
+            min-height: 40px;
+            overflow-wrap: break-word;
+        }
+        .button-container { margin-top: 15px; display: flex; justify-content: center; gap: 15px; }
         button { font-family: 'Sarabun', sans-serif; font-size: 1.2em; padding: 10px 25px; border-radius: 8px; border: none; color: white; cursor: pointer; transition: background-color 0.3s; }
-        #check-btn { background-color: #27ae60; }
-        #check-btn:hover { background-color: #2ecc71; }
+        #check-btn { background-color: var(--correct-color); }
         #play-sound-btn { font-size: 1.5em; background-color: #9b59b6; padding: 10px; }
-        #clear-btn { background-color: #e74c3c; font-size: 1.2em; padding: 10px 15px; }
-        #spinner-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        #spinner-box { background-color: white; padding: 40px; border-radius: 15px; text-align: center; box-shadow: 0 0 20px rgba(0,0,0,0.5); }
-        #spinner-result { font-size: 2.5em; font-weight: bold; margin-bottom: 20px; min-height: 50px; color: #0056b3; }
+
+        #keyboard-container { 
+            margin-top: 10px; 
+            padding: 0 1%;
+            max-width: 850px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .keyboard-row { 
+            display: flex; 
+            justify-content: center; 
+            gap: 0.8%; 
+            margin-bottom: 6px; /* ลดระยะห่างระหว่างแถว */
+        }
+        .key {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            min-width: 40px;
+            max-width: 70px;
+            height: 42px; /* ลดความสูงของปุ่ม */
+            background-color: #fcfcfc;
+            border: 1px solid #ccc;
+            border-bottom-width: 3px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        .key:active { transform: translateY(2px); border-bottom-width: 1px; }
+        .key.special { flex-grow: 2.5; max-width: 220px; background-color: #d5d8dc;}
+        .key.space { flex-grow: 8; max-width: 450px; }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.75); display: flex; justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.3s; }
+        .overlay.hidden { display: none; }
+        
+        /* --- Spinner & Feedback Overlay Styles (IMPROVED) --- */
+        .box { 
+            background-color: rgba(255, 255, 255, 0.95); /* สีขาวโปร่งแสง */
+            color: #333; /* ตัวอักษรสีดำ */
+            padding: 30px 40px; 
+            border-radius: 15px; 
+            text-align: center; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.5); 
+            width: 500px; /* ความกว้างสี่เหลี่ยมผืนผ้า */
+            min-height: 250px; /* ความสูงขั้นต่ำ */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #spinner-result { font-size: 3em; font-weight: bold; margin-bottom: 20px; min-height: 60px; color: #0056b3; }
+        #spin-btn, #start-question-btn, #next-question-btn { font-size: 1.2em; }
         #spin-btn { background-color: #8e44ad; }
         #start-question-btn { background-color: #f39c12; display: none; }
+        #feedback-box.correct { border-top: 10px solid var(--correct-color); }
+        #feedback-box.incorrect { border-top: 10px solid var(--incorrect-color); }
+        #feedback-title { font-size: 2.5em; margin: 0; }
+        #feedback-text { font-size: 1.5em; margin: 10px 0 20px; }
+        #next-question-btn { background-color: var(--primary-color); margin-top: 15px; }
+        #next-question-btn:hover { background-color: var(--secondary-color); }
     </style>
 </head>
 <body>
     <div id="game-container" style="display:none;">
-        <h1>เกมบัญชีคำพื้นฐาน ป.4</h1>
+        <h1>เกมบัญชีคำพื้นฐาน สำหรับนักเรียนประถมศึกษาปีที่ 4</h1>
         <div id="game-info">
             <div id="score">คะแนน: <span>0</span></div>
             <div id="timer">⏱️ เวลา: <span>60</span></div>
             <div id="hearts">❤️ ชีวิต: <span>3</span></div>
         </div>
         <div id="question-area">
-            <h2>กดปุ่มรูปลำโพงเพื่อฟังเสียง แล้วเรียงคำให้ถูกต้อง:</h2>
+            <h2>กดปุ่มรูปลำโพงเพื่อฟังเสียง แล้วพิมพ์คำให้ถูกต้อง</h2>
             <button id="play-sound-btn">🔊</button>
         </div>
-        <p>ตัวอักษรที่มีให้</p>
-        <div id="letters-container"></div>
-        <p>คำตอบของคุณ</p>
         <div id="answer-box">
             <span id="answer-text"></span>
-            <button id="clear-btn" title="ลบทั้งหมด">ล้าง</button>
         </div>
+        <div id="keyboard-container"></div>
         <div class="button-container">
             <button id="check-btn">ตรวจคำตอบ</button>
         </div>
     </div>
-    <div id="spinner-overlay">
-        <div id="spinner-box">
+
+    <div id="spinner-overlay" class="overlay">
+        <div id="spinner-box" class="box">
             <h2>สุ่มชื่อผู้ตอบ!</h2>
             <div id="spinner-result">???</div>
             <button id="spin-btn">สุ่มชื่อ</button>
@@ -79,142 +168,164 @@
         </div>
     </div>
 
+    <div id="feedback-overlay" class="overlay hidden">
+        <div id="feedback-box" class="box">
+            <h2 id="feedback-title"></h2>
+            <p id="feedback-text"></p>
+            <button id="next-question-btn">ข้อต่อไป</button>
+        </div>
+    </div>
+
     <audio id="word-audio" preload="auto"></audio>
     <audio id="correct-sound" src="https://www.myinstants.com/media/sounds/thuukt-ng.mp3" preload="auto"></audio>
-    <audio id="incorrect-sound" src="https://www.myinstants.com/media/sounds/phidduuaihm.mp3" preload="auto"></audio>
-    <audio id="spinner-sound" src="https://www.myinstants.com/media/sounds/999-social-credit-siren.mp3" preload="auto"></audio>
-    <audio id="start-sound" src="https://www.myinstants.com/media/sounds/pop_7e9Is8L.mp3" preload="auto"></audio>
+    <audio id="incorrect-sound" src="https://www.myinstants.com/media/sounds/phid.mp3" preload="auto"></audio>
+    <audio id="spinner-sound" src="https://www.myinstants.com/media/sounds/yaa.mp3" preload="auto"></audio>
+    <audio id="action-sound" src="https://www.myinstants.com/media/sounds/pop_7e9Is8L.mp3" preload="auto"></audio>
 
     <script>
         const studentNames = [ "ตะวัน", "สตริง", "ณิชา", "กัญญ์", "อู๋", "เจล", "ออร์แกน", "วีโก้", "กมลชัย", "วาวา" ];
         const wordList = [
-            { word: "กฎเกณฑ์", audio: "https://www.myinstants.com/media/sounds/kdeknth.mp3" }, { word: "กฎหมาย", audio: "https://www.myinstants.com/media/sounds/kdhmaay.mp3" }, { word: "กตเวที", audio: "https://www.myinstants.com/media/sounds/ktewthii.mp3" },
-            { word: "กตัญญู", audio: "https://www.myinstants.com/media/sounds/ktayyuu.mp3" }, { word: "กติกา", audio: "https://www.myinstants.com/media/sounds/ktikaa.mp3" }, { word: "ก้น", audio: "https://www.myinstants.com/media/sounds/kn_g3unyRS.mp3" },
-            { word: "กร", audio: "https://www.myinstants.com/media/sounds/k-n_Li3PmUo.mp3" }, { word: "กรม", audio: "https://www.myinstants.com/media/sounds/krm.mp3" }, { word: "กรมพระกำแพงเพชรอัครโยธิน", audio: "https://www.myinstants.com/media/sounds/krmphrakamaephngephchr-akhroythin.mp3" },
-            { word: "กรมพระปรมานุชิตชิโนรส", audio: "https://www.myinstants.com/media/sounds/krmphraprmaanuchitchionrs.mp3" }
+            { word: "กฎเกณฑ์", audio: "https://translate.google.com/translate_tts?ie=UTF-8&q=%E0%B8%81%E0%B8%8E%E0%B9%80%E0%B8%81%E0%B8%93%E0%B8%91%E0%B9%8C&tl=th&client=tw-ob" },
+            { word: "กฎหมาย", audio: "https://translate.google.com/translate_tts?ie=UTF-8&q=%E0%B8%81%E0%B8%8E%E0%B8%AB%E0%B8%A1%E0%B8%B2%E0%B8%A2&tl=th&client=tw-ob" },
+            { word: "กตเวที", audio: "https://translate.google.com/translate_tts?ie=UTF-8&q=%E0%B8%81%E0%B8%95%E0%B9%80%E0%B8%A7%E0%B8%97%E0%B8%B5&tl=th&client=tw-ob" },
+            { word: "กตัญญู", audio: "https://translate.google.com/translate_tts?ie=UTF-8&q=%E0%B8%81%E0%B8%95%E0%B8%B1%E0%B8%8D%E0%B8%8D%E0%B8%B9&tl=th&client=tw-ob" },
+            { word: "กติกา", audio: "https://translate.google.com/translate_tts?ie=UTF-8&q=%E0%B8%81%E0%B8%95%E0%B8%B4%E0%B8%81%E0%B8%B2&tl=th&client=tw-ob" },
+            { word: "ก้น", audio: "https://translate.google.com/translate_tts?ie=UTF-8&q=%E0%B8%81%E0%B9%89%E0%B8%99&tl=th&client=tw-ob" },
+            { word: "กร", audio: "https://translate.google.com/translate_tts?ie=UTF-8&q=%E0%B8%81%E0%B8%A3&tl=th&client=tw-ob" },
+            { word: "กรม", audio: "https://translate.google.com/translate_tts?ie=UTF-8&q=%E0%B8%81%E0%B8%A3%E0%B8%A1&tl=th&client=tw-ob" },
+            { word: "กรมพระกำแพงเพชรอัครโยธิน", audio: "https://translate.google.com/translate_tts?ie=UTF-8&q=%E0%B8%81%E0%B8%A3%E0%B8%A1%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%81%E0%B8%B3%E0%B9%81%E0%B8%9E%E0%B8%87%E0%B9%80%E0%B8%9E%E0%B8%8A%E0%B8%A3%E0%B8%AD%E0%B8%B1%E0%B8%84%E0%B8%A3%E0%B9%82%E0%B8%A2%E0%B8%98%E0%B8%B4%E0%B8%99&tl=th&client=tw-ob" },
+            { word: "กรมพระปรมานุชิตชิโนรส", audio: "https://translate.google.com/translate_tts?ie=UTF-8&q=%E0%B8%81%E0%B8%A3%E0%B8%A1%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%9B%E0%B8%A3%E0%B8%A1%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%8A%E0%B8%B4%E0%B8%95%E0%B8%8A%E0%B8%B4%E0%B9%82%E0%B8%99%E0%B8%A3%E0%B8%AA&tl=th&client=tw-ob" }
+        ];
+        
+        const thaiKeyboardLayout = [
+            ['ก', 'ข', 'ฃ', 'ค', 'ฅ', 'ฆ', 'ง', 'จ', 'ฉ', 'ช', 'ซ'],
+            ['ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ'],
+            ['ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม'],
+            ['ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'],
+            ['ะ', 'า', 'ำ','ั', 'ิ', 'ี', 'ึ', 'ื', 'ุ', 'ู'],
+            ['เ', 'แ', 'โ', 'ใ', 'ไ', 'ฤ', 'ฦ'],
+            ['่', '้', '๊', '๋', '์', 'ๆ']
         ];
 
-        // --- ส่วนของโค้ดที่เหลือทำงานเหมือนเดิม ไม่ต้องแก้ไข ---
 
         const gameContainer = document.getElementById('game-container');
         const scoreEl = document.querySelector('#score span');
         const timerEl = document.querySelector('#timer span');
         const heartsEl = document.querySelector('#hearts span');
-        const lettersContainer = document.getElementById('letters-container');
         const answerText = document.getElementById('answer-text');
         const checkBtn = document.getElementById('check-btn');
-        const clearBtn = document.getElementById('clear-btn');
         const playSoundBtn = document.getElementById('play-sound-btn');
-        const wordAudio = document.getElementById('word-audio');
+        const keyboardContainer = document.getElementById('keyboard-container');
         const spinnerOverlay = document.getElementById('spinner-overlay');
         const spinnerResult = document.getElementById('spinner-result');
         const spinBtn = document.getElementById('spin-btn');
         const startQuestionBtn = document.getElementById('start-question-btn');
-        
-        const correctSound = document.getElementById('correct-sound');
-        const incorrectSound = document.getElementById('incorrect-sound');
-        const spinnerSound = document.getElementById('spinner-sound');
-        const startSound = document.getElementById('start-sound');
+        const feedbackOverlay = document.getElementById('feedback-overlay');
+        const feedbackBox = document.getElementById('feedback-box');
+        const feedbackTitle = document.getElementById('feedback-title');
+        const feedbackText = document.getElementById('feedback-text');
+        const nextQuestionBtn = document.getElementById('next-question-btn');
+        const audio = { word: document.getElementById('word-audio'), correct: document.getElementById('correct-sound'), incorrect: document.getElementById('incorrect-sound'), spinner: document.getElementById('spinner-sound'), action: document.getElementById('action-sound'), };
 
         let lives = 3;
         let score = 0;
         let currentWordIndex = 0;
         let timerInterval;
-        let clickedLetters = [];
 
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
+        function createKeyboard() {
+            keyboardContainer.innerHTML = '';
+            thaiKeyboardLayout.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'keyboard-row';
+                row.forEach(keyChar => {
+                    const keyBtn = document.createElement('button');
+                    keyBtn.className = 'key';
+                    keyBtn.textContent = keyChar;
+                    keyBtn.onclick = () => appendToAnswer(keyChar);
+                    rowDiv.appendChild(keyBtn);
+                });
+                keyboardContainer.appendChild(rowDiv);
+            });
+            const specialRow = document.createElement('div');
+            specialRow.className = 'keyboard-row';
+            const spaceBtn = document.createElement('button');
+            spaceBtn.className = 'key special space';
+            spaceBtn.textContent = 'เว้นวรรค';
+            spaceBtn.onclick = () => appendToAnswer(' ');
+            const backspaceBtn = document.createElement('button');
+            backspaceBtn.className = 'key special';
+            backspaceBtn.textContent = 'ลบ';
+            backspaceBtn.onclick = backspace;
+            specialRow.appendChild(spaceBtn);
+            specialRow.appendChild(backspaceBtn);
+            keyboardContainer.appendChild(specialRow);
+        }
+
+        function appendToAnswer(char) {
+            audio.action.currentTime = 0;
+            audio.action.play();
+            answerText.textContent += char;
+        }
+
+        function backspace() {
+            audio.action.currentTime = 0;
+            audio.action.play();
+            answerText.textContent = answerText.textContent.slice(0, -1);
         }
         
-        function playAndProcess(isCorrect) {
-            if (isCorrect) {
-                correctSound.play();
-                score += 10;
-                setTimeout(() => {
-                    alert('ถูกต้อง! เก่งมากค่ะ');
-                    currentWordIndex++;
-                    updateDisplay();
-                    if (currentWordIndex < wordList.length) {
-                        spinnerOverlay.style.display = 'flex';
-                        spinBtn.style.display = 'inline-block';
-                        startQuestionBtn.style.display = 'none';
-                        spinnerResult.textContent = '???';
-                    } else { 
-                        endGame(true); 
-                    }
-                }, 300);
-            } else {
-                incorrectSound.play();
-                lives--;
-                const correctWord = wordList[currentWordIndex].word;
-                setTimeout(() => {
-                    if (lives > 0) {
-                        alert(`ผิด! คำที่ถูกต้องคือ "${correctWord}" (เหลือ ${lives} ชีวิต)`);
-                        currentWordIndex++;
-                        updateDisplay();
-                        if (currentWordIndex < wordList.length) {
-                            spinnerOverlay.style.display = 'flex';
-                            spinBtn.style.display = 'inline-block';
-                            startQuestionBtn.style.display = 'none';
-                            spinnerResult.textContent = '???';
-                        } else { 
-                            endGame(true); 
-                        }
-                    } else {
-                        alert(`คำที่ถูกต้องคือ "${correctWord}"`);
-                        endGame(false);
-                    }
-                }, 500);
-            }
-        }
-
-        function checkAnswer() {
-            clearInterval(timerInterval);
-            checkBtn.disabled = true;
-            const isCorrect = answerText.textContent === wordList[currentWordIndex].word;
-            playAndProcess(isCorrect);
-        }
-
         function setupQuestion() {
             if (currentWordIndex >= wordList.length) { endGame(true); return; }
-            lettersContainer.innerHTML = '';
             answerText.textContent = '';
-            clickedLetters = [];
             checkBtn.disabled = false;
-            playSoundBtn.onclick = () => {
-                wordAudio.src = wordList[currentWordIndex].audio;
-                wordAudio.play();
-            };
-            const characters = shuffleArray(wordList[currentWordIndex].word.split(''));
-            characters.forEach((char, index) => {
-                const letterBtn = document.createElement('button');
-                letterBtn.classList.add('letter-btn');
-                letterBtn.textContent = char;
-                letterBtn.dataset.id = index;
-                letterBtn.onclick = () => handleLetterClick(letterBtn, char);
-                lettersContainer.appendChild(letterBtn);
-            });
+            playSoundBtn.onclick = () => { audio.word.src = wordList[currentWordIndex].audio; audio.word.play(); };
             startTimer();
             updateDisplay();
             setTimeout(() => playSoundBtn.click(), 500);
         }
 
-        function handleLetterClick(button, char) {
-            answerText.textContent += char;
-            button.disabled = true;
-            clickedLetters.push(button);
+        function checkAnswer() {
+            clearInterval(timerInterval);
+            checkBtn.disabled = true;
+            const isCorrect = answerText.textContent.trim() === wordList[currentWordIndex].word;
+            showFeedback(isCorrect);
+        }
+        
+        function showFeedback(isCorrect) {
+            const currentWord = wordList[currentWordIndex];
+            if (isCorrect) {
+                score += 10;
+                feedbackTitle.textContent = '✅ ถูกต้อง!';
+                feedbackText.textContent = `เก่งมากเลยค่ะ`;
+                feedbackBox.className = 'box correct';
+                audio.correct.play();
+            } else {
+                lives--;
+                feedbackTitle.textContent = '❌ ผิดค่ะ';
+                feedbackText.textContent = `คำที่ถูกต้องคือ "${currentWord.word}"`;
+                feedbackBox.className = 'box incorrect';
+                audio.incorrect.play();
+            }
+            updateDisplay();
+            feedbackOverlay.classList.remove('hidden');
         }
 
-        clearBtn.addEventListener('click', () => {
-            answerText.textContent = '';
-            clickedLetters.forEach(btn => btn.disabled = false);
-            clickedLetters = [];
-        });
-
+        function proceedToNextStep() {
+            feedbackOverlay.classList.add('hidden');
+            if (lives <= 0) {
+                endGame(false);
+            } else {
+                currentWordIndex++;
+                if (currentWordIndex < wordList.length) {
+                    spinnerOverlay.classList.remove('hidden');
+                    spinBtn.style.display = 'inline-block';
+                    startQuestionBtn.style.display = 'none';
+                    spinnerResult.textContent = '???';
+                } else {
+                    endGame(true);
+                }
+            }
+        }
+        
         function updateDisplay() {
             scoreEl.textContent = score;
             heartsEl.textContent = lives;
@@ -231,45 +342,48 @@
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
                     checkBtn.disabled = true;
-                    playAndProcess(false);
+                    showFeedback(false);
                 }
             }, 1000);
         }
-
+        
         function endGame(isWin) {
+            clearInterval(timerInterval);
             gameContainer.innerHTML = `
                 <h1>${isWin ? `🎉 ยินดีด้วย! คุณทำครบทุกข้อแล้ว ได้คะแนน ${score} คะแนน! 🎉` : `GAME OVER! คุณไม่มีชีวิตเหลือแล้ว`}</h1>
                 <button onclick="window.location.reload()" style="background-color: #3498db;">เล่นอีกครั้ง</button>
             `;
             gameContainer.style.display = 'block';
+            spinnerOverlay.classList.add('hidden');
+            feedbackOverlay.classList.add('hidden');
         }
-        
+
         checkBtn.addEventListener('click', checkAnswer);
-        
+        nextQuestionBtn.addEventListener('click', proceedToNextStep);
         spinBtn.addEventListener('click', () => {
             spinBtn.disabled = true;
-            spinnerSound.currentTime = 0;
-            spinnerSound.play(); 
-
+            audio.spinner.currentTime = 0;
+            audio.spinner.play(); 
             let spinCount = 0;
             const spinInterval = setInterval(() => {
                 spinnerResult.textContent = studentNames[Math.floor(Math.random() * studentNames.length)];
                 if (++spinCount > 25) { 
                     clearInterval(spinInterval);
-                    spinnerSound.pause(); 
+                    audio.spinner.pause(); 
                     spinBtn.disabled = false;
                     spinBtn.style.display = 'none';
                     startQuestionBtn.style.display = 'inline-block';
                 }
             }, 100);
         });
-
         startQuestionBtn.addEventListener('click', () => {
-            startSound.play();
-            spinnerOverlay.style.display = 'none';
+            audio.action.play();
+            spinnerOverlay.classList.add('hidden');
             gameContainer.style.display = 'block';
             setupQuestion();
         });
+        
+        createKeyboard();
         updateDisplay();
     </script>
 </body>
