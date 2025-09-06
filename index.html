@@ -15,7 +15,6 @@
         }
         html, body {
             height: 100%;
-            overflow: hidden; /* ป้องกันการเลื่อนหน้าจอ */
             margin: 0;
         }
         body {
@@ -136,6 +135,44 @@
         #feedback-text { font-size: 1.5em; margin: 10px 0 20px; }
         #next-question-btn { background-color: var(--primary-color); margin-top: 15px; }
         #next-question-btn:hover { background-color: var(--secondary-color); }
+         /* --- NEW: Responsive Styles for Mobile --- */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                height: auto;
+                min-height: 100%;
+            }
+            #game-container {
+                width: 100%;
+                height: 100%;
+                min-height: 100vh;
+                padding: 10px;
+                border-radius: 0;
+                box-sizing: border-box; /* ทำให้ padding ไม่ล้นจอ */
+            }
+            h1 { font-size: 1.5em; margin: 5px 0; }
+            h2 { font-size: 1em; margin: 5px 0; }
+            #game-info { font-size: 1em; }
+            #answer-box { min-height: 50px; }
+            #answer-text { font-size: 1.5em; }
+            .key {
+                height: 40px;
+                min-width: 20px; /* สำคัญมาก: ทำให้ปุ่มย่อได้ */
+                font-size: 1em;
+                border-radius: 5px;
+            }
+            .keyboard-row {
+                gap: 1.5%; /* เพิ่ม gap เล็กน้อยเพื่อให้จิ้มง่าย */
+            }
+            .key.special { font-size: 0.8em; }
+            button {
+                padding: 8px 15px;
+                font-size: 1.1em;
+            }
+            .box {
+                width: 90%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -388,3 +425,4 @@
     </script>
 </body>
 </html>
+
