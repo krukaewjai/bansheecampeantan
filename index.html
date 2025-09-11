@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>เกมบัญชีคำพื้นฐาน สำหรับนักเรียนประถมศึกษาปีที่ 4</title>
     <style>
-           :root {
+        /* NEW: Import the Google Font at the very top */
+        @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai+Looped:wght@400;500;700&display=swap');
+
+        :root {
             --primary-color: #3498db;
             --secondary-color: #2980b9; 
             --correct-color: #27ae60;
@@ -16,168 +19,112 @@
         html, body {
             height: 100%;
             margin: 0;
+            overflow: hidden; /* ป้องกันการเลื่อนหน้าจอ */
         }
         body {
-            ffont-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            /* CHANGED: Set the new font for the entire page */
+            font-family: 'IBM Plex Sans Thai Looped', sans-serif;
             color: #333;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10px 0;
             user-select: none;
-            background-image: url('https://lh5.googleusercontent.com/d/1p28Ss160fZWFSe67QLrgHvPcZgN4bgAZ'); /* เปลี่ยนเป็นลิงก์พื้นหลังที่ไม่หมดอายุ */
+            background-image: url('https://lh5.googleusercontent.com/d/1p28Ss160fZWFSe67QLrgHvPcZgN4bgAZ');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
         }
-        #game-container { 
+        .container {
             width: 95%; 
-            max-width: 1100px;
+            max-width: 800px;
             background-color: rgba(255, 255, 255, 0.98); 
-            padding: 20px; 
+            padding: 25px; 
             border-radius: 15px; 
             box-shadow: 0 4px 20px rgba(0,0,0,0.2); 
             text-align: center; 
         }
+
+        /* --- Login Styles --- */
+        #login-container h1 { font-size: 2.5em; color: var(--primary-color); }
+        #login-container p { font-size: 1.2em; margin-bottom: 25px; }
+        #username-input {
+            font-family: 'IBM Plex Sans Thai Looped', sans-serif; /* CHANGED */
+            width: 80%;
+            padding: 15px;
+            font-size: 1.5em;
+            border: 2px solid #ccc;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #start-game-btn {
+            font-size: 1.5em;
+            padding: 12px 40px;
+            background-color: var(--correct-color);
+        }
+
+        /* --- Game Styles --- */
         h1 { color: #0056b3; font-size: 2.2em; margin: 10px 0; }
-        h2 { font-size: 1.1em; margin: 10px 0; }
-        #game-info { display: flex; justify-content: space-around; align-items: center; font-size: 1.4em; margin-bottom: 10px; font-weight: bold; flex-wrap: wrap; }
+        #player-name-display { color: var(--secondary-color); font-weight: 700; }
+        #game-info { display: flex; justify-content: space-around; align-items: center; font-size: 1.4em; margin-bottom: 20px; font-weight: 500; flex-wrap: wrap; }
         #hearts { color: var(--incorrect-color); }
         #timer { color: #f39c12; }
         #score { color: var(--correct-color); }
-        #question-area { background-color: #eef5ff; padding: 10px; border-radius: 10px; margin-bottom: 10px; }
-        #answer-box { 
-            display: flex; 
-            align-items: center; 
-            min-height: 60px; 
-            background-color: var(--bg-light); 
-            padding: 5px 10px; 
-            border-radius: 10px; 
-            border: 2px solid #bdc3c7; 
-            margin-bottom: 10px;
+        #question-area { background-color: #eef5ff; padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+        #answer-input {
+            width: 90%; padding: 15px; border-radius: 10px; border: 2px solid #bdc3c7; text-align: center; font-size: 2em;
+            font-weight: 700; color: var(--text-dark); letter-spacing: 2px; margin-bottom: 15px;
+            font-family: 'IBM Plex Sans Thai Looped', sans-serif; /* CHANGED */
         }
-        #answer-text { 
-            flex-grow: 1; 
-            text-align: center; 
-            font-size: 2em; 
-            font-weight: bold; 
-            color: var(--text-dark); 
-            letter-spacing: 2px;
-            min-height: 40px;
-            overflow-wrap: break-word;
-        }
+        #answer-input:focus { outline: none; border-color: var(--primary-color); box-shadow: 0 0 8px rgba(52, 152, 219, 0.5); }
         .button-container { margin-top: 15px; display: flex; justify-content: center; gap: 15px; }
-        button { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; font-size: 1.2em; padding: 10px 25px; border-radius: 8px; border: none; color: white; cursor: pointer; transition: background-color 0.3s; }
+        button { 
+            font-family: 'IBM Plex Sans Thai Looped', sans-serif; /* CHANGED */
+            font-size: 1.2em; 
+            padding: 10px 25px; 
+            border-radius: 8px; 
+            border: none; 
+            color: white; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+            font-weight: 500;
+        }
         #check-btn { background-color: var(--correct-color); }
         #play-sound-btn { font-size: 1.5em; background-color: #9b59b6; padding: 10px; }
 
-        #keyboard-container { 
-            margin-top: 10px; 
-            padding: 0 1%;
-            max-width: 850px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .keyboard-row { 
-            display: flex; 
-            justify-content: center; 
-            gap: 0.8%; 
-            margin-bottom: 6px; /* ลดระยะห่างระหว่างแถว */
-        }
-        .key {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex: 1;
-            min-width: 40px;
-            max-width: 70px;
-            height: 42px; /* ลดความสูงของปุ่ม */
-            background-color: #fcfcfc;
-            border: 1px solid #ccc;
-            border-bottom-width: 3px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-        }
-        .key:active { transform: translateY(2px); border-bottom-width: 1px; }
-        .key.special { flex-grow: 2.5; max-width: 220px; background-color: #d5d8dc;}
-        .key.space { flex-grow: 8; max-width: 450px; }
-
+        /* --- Overlay & Feedback Styles --- */
         .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.75); display: flex; justify-content: center; align-items: center; z-index: 1000; transition: opacity 0.3s; }
         .overlay.hidden { display: none; }
-        
-        /* --- Spinner & Feedback Overlay Styles (IMPROVED) --- */
-        .box { 
-            background-color: rgba(255, 255, 255, 0.95); /* สีขาวโปร่งแสง */
-            color: #333; /* ตัวอักษรสีดำ */
-            padding: 30px 40px; 
-            border-radius: 15px; 
-            text-align: center; 
-            box-shadow: 0 0 20px rgba(0,0,0,0.5); 
-            width: 500px; /* ความกว้างสี่เหลี่ยมผืนผ้า */
-            min-height: 250px; /* ความสูงขั้นต่ำ */
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-        #spinner-result { font-size: 3em; font-weight: bold; margin-bottom: 20px; min-height: 60px; color: #0056b3; }
-        #spin-btn, #start-question-btn, #next-question-btn { font-size: 1.2em; }
-        #spin-btn { background-color: #8e44ad; }
-        #start-question-btn { background-color: #f39c12; display: none; }
+        .box { background-color: rgba(255, 255, 255, 0.95); color: #333; padding: 30px 40px; border-radius: 15px; text-align: center; box-shadow: 0 0 20px rgba(0,0,0,0.5); width: 500px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         #feedback-box.correct { border-top: 10px solid var(--correct-color); }
         #feedback-box.incorrect { border-top: 10px solid var(--incorrect-color); }
-        #feedback-title { font-size: 2.5em; margin: 0; }
+        #feedback-title { font-size: 2.5em; margin: 0; font-weight: 700;}
         #feedback-text { font-size: 1.5em; margin: 10px 0 20px; }
         #next-question-btn { background-color: var(--primary-color); margin-top: 15px; }
-        #next-question-btn:hover { background-color: var(--secondary-color); }
-         /* --- NEW: Responsive Styles for Mobile --- */
-        @media (max-width: 768px) {
-            body {
-                padding: 0;
-                height: auto;
-                min-height: 100%;
-            }
-            #game-container {
-                width: 100%;
-                height: 100%;
-                min-height: 100vh;
-                padding: 10px;
-                border-radius: 0;
-                box-sizing: border-box; /* ทำให้ padding ไม่ล้นจอ */
-            }
-            h1 { font-size: 1.5em; margin: 5px 0; }
-            h2 { font-size: 1em; margin: 5px 0; }
-            #game-info { font-size: 1em; }
-            #answer-box { min-height: 50px; }
-            #answer-text { font-size: 1.5em; }
-            .key {
-                height: 40px;
-                min-width: 20px; /* สำคัญมาก: ทำให้ปุ่มย่อได้ */
-                font-size: 1em;
-                border-radius: 5px;
-            }
-            .keyboard-row {
-                gap: 1.5%; /* เพิ่ม gap เล็กน้อยเพื่อให้จิ้มง่าย */
-            }
-            .key.special { font-size: 0.8em; }
-            button {
-                padding: 8px 15px;
-                font-size: 1.1em;
-            }
-            .box {
-                width: 90%;
-            }
-        }
+
+        /* --- Leaderboard Styles --- */
+        #leaderboard-container ol { list-style-type: none; padding: 0; margin: 20px 0; }
+        #leaderboard-container li { background-color: #f0f0f0; padding: 12px 15px; margin-bottom: 8px; border-radius: 8px; font-size: 1.4em; display: flex; justify-content: space-between; align-items: center; }
+        #leaderboard-container li:nth-child(1) { background-color: #ffd700; font-weight: 700; color: #333; } /* Gold */
+        #leaderboard-container li:nth-child(2) { background-color: #silver; font-weight: 500; color: #333;} /* Silver */
+        #leaderboard-container li:nth-child(3) { background-color: #cd7f32; font-weight: 500; color: white;} /* Bronze */
+        .rank { margin-right: 15px; font-weight: 700; }
+        .name { flex-grow: 1; text-align: left; }
+        .score { font-weight: 700; }
     </style>
 </head>
 <body>
-    <div id="game-container" style="display:none;">
-        <h1>เกมบัญชีคำพื้นฐาน สำหรับนักเรียนประถมศึกษาปีที่ 4</h1>
+
+    <div id="login-container" class="container">
+        <h1>เกมสะกดคำหรรษา</h1>
+        <p>สำหรับนักเรียนชั้นประถมศึกษาปีที่ 4</p>
+        <input type="text" id="username-input" placeholder="กรอกชื่อผู้เล่น..." maxlength="15">
+        <button id="start-game-btn">เริ่มเกม!</button>
+    </div>
+
+    <div id="game-container" class="container" style="display:none;">
+        <h1>ผู้เล่น: <span id="player-name-display"></span></h1>
         <div id="game-info">
             <div id="score">คะแนน: <span>0</span></div>
             <div id="timer">⏱️ เวลา: <span>60</span></div>
@@ -187,22 +134,16 @@
             <h2>กดปุ่มรูปลำโพงเพื่อฟังเสียง แล้วพิมพ์คำให้ถูกต้อง</h2>
             <button id="play-sound-btn">🔊</button>
         </div>
-        <div id="answer-box">
-            <span id="answer-text"></span>
-        </div>
-        <div id="keyboard-container"></div>
+        <input type="text" id="answer-input" placeholder="พิมพ์คำตอบที่นี่..." autocomplete="off">
         <div class="button-container">
-            <button id="check-btn">ตรวจคำตอบ</button>
+            <button id="check-btn">ตรวจคำตอบ (Enter)</button>
         </div>
     </div>
-
-    <div id="spinner-overlay" class="overlay">
-        <div id="spinner-box" class="box">
-            <h2>สุ่มชื่อผู้ตอบ!</h2>
-            <div id="spinner-result">???</div>
-            <button id="spin-btn">สุ่มชื่อ</button>
-            <button id="start-question-btn">เริ่มทำข้อนี้</button>
-        </div>
+    
+    <div id="leaderboard-container" class="container" style="display:none;">
+        <h1>🏆 ตารางคะแนน 🏆</h1>
+        <ol id="leaderboard-list"></ol>
+        <button id="play-again-btn" style="background-color:#3498db; font-size: 1.3em;">เล่นอีกครั้ง</button>
     </div>
 
     <div id="feedback-overlay" class="overlay hidden">
@@ -216,11 +157,8 @@
     <audio id="word-audio" preload="auto"></audio>
     <audio id="correct-sound" src="https://www.myinstants.com/media/sounds/thuukt-ng.mp3" preload="auto"></audio>
     <audio id="incorrect-sound" src="https://www.myinstants.com/media/sounds/phid.mp3" preload="auto"></audio>
-    <audio id="spinner-sound" src="https://www.myinstants.com/media/sounds/yaa.mp3" preload="auto"></audio>
-    <audio id="action-sound" src="https://www.myinstants.com/media/sounds/pop_7e9Is8L.mp3" preload="auto"></audio>
 
     <script>
-        const studentNames = [ "ตะวัน", "สตริง", "ณิชา", "กัญญ์", "อู๋", "เจล", "ออร์แกน", "วีโก้", "กมลชัย", "วาวา" ];
         const wordList = [
             { word: "กฎเกณฑ์", audio: "https://www.myinstants.com/media/sounds/kdeknth.mp3" },
             { word: "กฎหมาย", audio: "https://www.myinstants.com/media/sounds/kdhmaay.mp3" },
@@ -234,85 +172,58 @@
             { word: "กรมพระปรมานุชิตชิโนรส", audio: "https://www.myinstants.com/media/sounds/krmphraprmaanuchitchionrs.mp3" }
         ];
         
-        const thaiKeyboardLayout = [
-            ['ก', 'ข', 'ฃ', 'ค', 'ฅ', 'ฆ', 'ง', 'จ', 'ฉ', 'ช', 'ซ'],
-            ['ฌ', 'ญ', 'ฎ', 'ฏ', 'ฐ', 'ฑ', 'ฒ', 'ณ', 'ด', 'ต', 'ถ'],
-            ['ท', 'ธ', 'น', 'บ', 'ป', 'ผ', 'ฝ', 'พ', 'ฟ', 'ภ', 'ม'],
-            ['ย', 'ร', 'ล', 'ว', 'ศ', 'ษ', 'ส', 'ห', 'ฬ', 'อ', 'ฮ'],
-            ['ะ', 'า', 'ำ', 'ั', 'ิ', 'ี', 'ึ', 'ื', 'ุ', 'ู'],
-            ['เ', 'แ', 'โ', 'ใ', 'ไ', 'ฤ', 'ฦ'],
-            ['่', '้', '๊', '๋', '์', 'ๆ']
-        ];
-
-
+        // --- ELEMENT SELECTORS ---
+        const loginContainer = document.getElementById('login-container');
+        const usernameInput = document.getElementById('username-input');
+        const startGameBtn = document.getElementById('start-game-btn');
+        
         const gameContainer = document.getElementById('game-container');
+        const playerNameDisplay = document.getElementById('player-name-display');
         const scoreEl = document.querySelector('#score span');
         const timerEl = document.querySelector('#timer span');
         const heartsEl = document.querySelector('#hearts span');
-        const answerText = document.getElementById('answer-text');
+        const answerInput = document.getElementById('answer-input');
         const checkBtn = document.getElementById('check-btn');
         const playSoundBtn = document.getElementById('play-sound-btn');
-        const keyboardContainer = document.getElementById('keyboard-container');
-        const spinnerOverlay = document.getElementById('spinner-overlay');
-        const spinnerResult = document.getElementById('spinner-result');
-        const spinBtn = document.getElementById('spin-btn');
-        const startQuestionBtn = document.getElementById('start-question-btn');
+
         const feedbackOverlay = document.getElementById('feedback-overlay');
         const feedbackBox = document.getElementById('feedback-box');
         const feedbackTitle = document.getElementById('feedback-title');
         const feedbackText = document.getElementById('feedback-text');
         const nextQuestionBtn = document.getElementById('next-question-btn');
-        const audio = { word: document.getElementById('word-audio'), correct: document.getElementById('correct-sound'), incorrect: document.getElementById('incorrect-sound'), spinner: document.getElementById('spinner-sound'), action: document.getElementById('action-sound'), };
-
-        let lives = 3;
-        let score = 0;
-        let currentWordIndex = 0;
-        let timerInterval;
-
-        function createKeyboard() {
-            keyboardContainer.innerHTML = '';
-            thaiKeyboardLayout.forEach(row => {
-                const rowDiv = document.createElement('div');
-                rowDiv.className = 'keyboard-row';
-                row.forEach(keyChar => {
-                    const keyBtn = document.createElement('button');
-                    keyBtn.className = 'key';
-                    keyBtn.textContent = keyChar;
-                    keyBtn.onclick = () => appendToAnswer(keyChar);
-                    rowDiv.appendChild(keyBtn);
-                });
-                keyboardContainer.appendChild(rowDiv);
-            });
-            const specialRow = document.createElement('div');
-            specialRow.className = 'keyboard-row';
-            const spaceBtn = document.createElement('button');
-            spaceBtn.className = 'key special space';
-            spaceBtn.textContent = 'เว้นวรรค';
-            spaceBtn.onclick = () => appendToAnswer(' ');
-            const backspaceBtn = document.createElement('button');
-            backspaceBtn.className = 'key special';
-            backspaceBtn.textContent = 'ลบ';
-            backspaceBtn.onclick = backspace;
-            specialRow.appendChild(spaceBtn);
-            specialRow.appendChild(backspaceBtn);
-            keyboardContainer.appendChild(specialRow);
-        }
-
-        function appendToAnswer(char) {
-            audio.action.currentTime = 0;
-            audio.action.play();
-            answerText.textContent += char;
-        }
-
-        function backspace() {
-            audio.action.currentTime = 0;
-            audio.action.play();
-            answerText.textContent = answerText.textContent.slice(0, -1);
-        }
         
+        const leaderboardContainer = document.getElementById('leaderboard-container');
+        const leaderboardList = document.getElementById('leaderboard-list');
+        const playAgainBtn = document.getElementById('play-again-btn');
+
+        const audio = { word: document.getElementById('word-audio'), correct: document.getElementById('correct-sound'), incorrect: document.getElementById('incorrect-sound')};
+
+        // --- GAME STATE VARIABLES ---
+        let lives;
+        let score;
+        let currentWordIndex;
+        let timerInterval;
+        let currentPlayerName = '';
+
+        function initGame() {
+            lives = 3;
+            score = 0;
+            currentWordIndex = 0;
+            updateDisplay();
+            gameContainer.style.display = 'block';
+            leaderboardContainer.style.display = 'none';
+            loginContainer.style.display = 'none';
+            setupQuestion();
+        }
+
         function setupQuestion() {
-            if (currentWordIndex >= wordList.length) { endGame(true); return; }
-            answerText.textContent = '';
+            if (currentWordIndex >= wordList.length) { 
+                endGame(true); 
+                return; 
+            }
+            answerInput.value = '';
+            answerInput.disabled = false;
+            answerInput.focus();
             checkBtn.disabled = false;
             playSoundBtn.onclick = () => { audio.word.src = wordList[currentWordIndex].audio; audio.word.play(); };
             startTimer();
@@ -321,9 +232,11 @@
         }
 
         function checkAnswer() {
+            if (checkBtn.disabled) return;
             clearInterval(timerInterval);
             checkBtn.disabled = true;
-            const isCorrect = answerText.textContent.trim() === wordList[currentWordIndex].word;
+            answerInput.disabled = true;
+            const isCorrect = answerInput.value.trim() === wordList[currentWordIndex].word;
             showFeedback(isCorrect);
         }
         
@@ -352,14 +265,7 @@
                 endGame(false);
             } else {
                 currentWordIndex++;
-                if (currentWordIndex < wordList.length) {
-                    spinnerOverlay.classList.remove('hidden');
-                    spinBtn.style.display = 'inline-block';
-                    startQuestionBtn.style.display = 'none';
-                    spinnerResult.textContent = '???';
-                } else {
-                    endGame(true);
-                }
+                setupQuestion(); // Go directly to the next question
             }
         }
         
@@ -384,45 +290,62 @@
             }, 1000);
         }
         
-        function endGame(isWin) {
+        function endGame() {
             clearInterval(timerInterval);
-            gameContainer.innerHTML = `
-                <h1>${isWin ? `🎉 ยินดีด้วย! คุณทำครบทุกข้อแล้ว ได้คะแนน ${score} คะแนน! 🎉` : `GAME OVER! คุณไม่มีชีวิตเหลือแล้ว`}</h1>
-                <button onclick="window.location.reload()" style="background-color: #3498db;">เล่นอีกครั้ง</button>
-            `;
-            gameContainer.style.display = 'block';
-            spinnerOverlay.classList.add('hidden');
-            feedbackOverlay.classList.add('hidden');
+            saveScore(currentPlayerName, score);
+            displayLeaderboard();
         }
+
+        // --- NEW: Score and Leaderboard Functions ---
+        function saveScore(name, score) {
+            const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+            const newScore = { name, score };
+            highScores.push(newScore);
+            highScores.sort((a, b) => b.score - a.score);
+            highScores.splice(10);
+            localStorage.setItem('highScores', JSON.stringify(highScores));
+        }
+
+        function displayLeaderboard() {
+            gameContainer.style.display = 'none';
+            leaderboardContainer.style.display = 'block';
+            const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+            
+            leaderboardList.innerHTML = highScores
+                .map((scoreItem, index) => `
+                    <li>
+                        <span class="rank">#${index + 1}</span>
+                        <span class="name">${scoreItem.name}</span>
+                        <span class="score">${scoreItem.score} คะแนน</span>
+                    </li>
+                `)
+                .join('');
+        }
+
+        // --- EVENT LISTENERS ---
+        startGameBtn.addEventListener('click', () => {
+            currentPlayerName = usernameInput.value.trim();
+            if (currentPlayerName) {
+                playerNameDisplay.textContent = currentPlayerName;
+                initGame();
+            } else {
+                alert('กรุณากรอกชื่อผู้เล่นก่อนเริ่มเกม');
+            }
+        });
+
+        playAgainBtn.addEventListener('click', () => {
+            leaderboardContainer.style.display = 'none';
+            loginContainer.style.display = 'block';
+            usernameInput.value = ""; // Clear the username field for the next player
+        });
 
         checkBtn.addEventListener('click', checkAnswer);
         nextQuestionBtn.addEventListener('click', proceedToNextStep);
-        spinBtn.addEventListener('click', () => {
-            spinBtn.disabled = true;
-            audio.spinner.currentTime = 0;
-            audio.spinner.play(); 
-            let spinCount = 0;
-            const spinInterval = setInterval(() => {
-                spinnerResult.textContent = studentNames[Math.floor(Math.random() * studentNames.length)];
-                if (++spinCount > 25) { 
-                    clearInterval(spinInterval);
-                    audio.spinner.pause(); 
-                    spinBtn.disabled = false;
-                    spinBtn.style.display = 'none';
-                    startQuestionBtn.style.display = 'inline-block';
-                }
-            }, 100);
+        answerInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                checkAnswer();
+            }
         });
-        startQuestionBtn.addEventListener('click', () => {
-            audio.action.play();
-            spinnerOverlay.classList.add('hidden');
-            gameContainer.style.display = 'block';
-            setupQuestion();
-        });
-        
-        createKeyboard();
-        updateDisplay();
     </script>
 </body>
 </html>
-
