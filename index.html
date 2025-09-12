@@ -63,7 +63,9 @@
             padding: 12px 40px;
             background-color: var(--correct-color);
         }
-
+        #view-leaderboard-btn {
+             background-color: var(--primary-color);
+        }
         /* --- Game Styles --- */
         h1 { color: #0056b3; font-size: 2.2em; margin: 10px 0; }
         #player-name-display { color: var(--secondary-color); font-weight: 700; }
@@ -117,11 +119,14 @@
 <body>
 
     <div id="login-container" class="container">
-        <h1>เกมสะกดคำหรรษา</h1>
+        <h1>เกมบัญชีคำพื้นฐาน</h1>
         <p>สำหรับนักเรียนชั้นประถมศึกษาปีที่ 4</p>
-        <input type="text" id="username-input" placeholder="กรอกชื่อผู้เล่น..." maxlength="15">
+       <input type="text" id="username-input" placeholder="กรอกชื่อผู้เล่น..." maxlength="15">
+    <div class="button-container">
         <button id="start-game-btn">เริ่มเกม!</button>
+        <button id="view-leaderboard-btn">ดูอันดับคะแนน</button>
     </div>
+</div>
 
     <div id="game-container" class="container" style="display:none;">
         <h1>ผู้เล่น: <span id="player-name-display"></span></h1>
@@ -176,6 +181,7 @@
         const loginContainer = document.getElementById('login-container');
         const usernameInput = document.getElementById('username-input');
         const startGameBtn = document.getElementById('start-game-btn');
+        const viewLeaderboardBtn = document.getElementById('view-leaderboard-btn');
         
         const gameContainer = document.getElementById('game-container');
         const playerNameDisplay = document.getElementById('player-name-display');
@@ -343,7 +349,10 @@
                 alert('กรุณากรอกชื่อผู้เล่นก่อนเริ่มเกม');
             }
         });
-
+            viewLeaderboardBtn.addEventListener('click', () => { // NEW
+            loginContainer.style.display = 'none';
+            displayLeaderboard();
+        });
         playAgainBtn.addEventListener('click', () => {
             leaderboardContainer.style.display = 'none';
             loginContainer.style.display = 'block';
@@ -360,3 +369,4 @@
     </script>
 </body>
 </html>
+
