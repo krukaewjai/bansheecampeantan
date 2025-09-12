@@ -297,14 +297,25 @@
         }
 
         // --- NEW: Score and Leaderboard Functions ---
-        function saveScore(name, score) {
-            const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
-            const newScore = { name, score };
-            highScores.push(newScore);
-            highScores.sort((a, b) => b.score - a.score);
-            highScores.splice(10);
-            localStorage.setItem('highScores', JSON.stringify(highScores));
-        }
+       function saveScore(name, score) {
+    // --- ส่วนที่ 1: บันทึกลง Google Sheet ---
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbzsRSZOSoI8ASz5uPR1FgrA2tQypAeClK7p7OS88dbLcvD5LhzrR-iu1iVQHK-WyAWU/exec'; // <--- ❗ สำคัญ: แก้ไขตรงนี้
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('score', score);
+
+    fetch(scriptURL, { method: 'POST', body: formData})
+        .then(response => console.log('บันทึกคะแนนสำ!', response))
+        .catch(error => console.error('เกิดข้อผิดพลาดในการบันทึกคะแนน!', error.message));
+
+    // --- ส่วนที่ 2: บันทึกลง Local Storage (สำหรับตารางคะแนนในเครื่อง) ---
+    const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
+    const newScore = { name, score };
+    highScores.push(newScore);
+    highScores.sort((a, b) => b.score - a.score);
+    highScores.splice(10); // เก็บแค่ 10 อันดับแรก
+    localStorage.setItem('highScores', JSON.stringify(highScores));
+}
 
         function displayLeaderboard() {
             gameContainer.style.display = 'none';
