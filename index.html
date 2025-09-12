@@ -324,20 +324,42 @@
 }
 
         function displayLeaderboard() {
-            gameContainer.style.display = 'none';
-            leaderboardContainer.style.display = 'block';
-            const highScores = JSON.parse(localStorage.getItem('highScores')) || [];
-            
-            leaderboardList.innerHTML = highScores
-                .map((scoreItem, index) => `
-                    <li>
-                        <span class="rank">#${index + 1}</span>
-                        <span class="name">${scoreItem.name}</span>
-                        <span class="score">${scoreItem.score} คะแนน</span>
-                    </li>
-                `)
-                .join('');
-        }
+    // ซ่อนหน้าจออื่นๆ ที่ไม่เกี่ยวข้อง
+    gameContainer.style.display = 'none';
+    loginContainer.style.display = 'none';
+    // แสดงหน้าตารางคะแนน
+    leaderboardContainer.style.display = 'block';
+
+    // แสดงข้อความ "กำลังโหลด..." ชั่วคราว
+    leaderboardList.innerHTML = '<li>กำลังโหลดข้อมูลคะแนน... ⏳</li>';
+
+    const scriptURL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE'; // <-- ใช้ URL เดิมของคุณ
+
+    // ไปดึงข้อมูลคะแนนจาก Google Sheet
+    fetch(scriptURL)
+        .then(res => res.json())
+        .then(data => {
+            // เมื่อได้รับข้อมูลแล้ว ก็นำมาสร้างเป็นรายการตารางคะแนน
+            if (data.length === 0) {
+                leaderboardList.innerHTML = '<li>ยังไม่มีข้อมูลคะแนน</li>';
+            } else {
+                leaderboardList.innerHTML = data
+                    .map((scoreItem, index) => `
+                        <li>
+                            <span class="rank">#${index + 1}</span>
+                            <span class="name">${scoreItem.name}</span>
+                            <span class="score">${scoreItem.score} คะแนน</span>
+                        </li>
+                    `)
+                    .join('');
+            }
+        })
+        .catch(error => {
+            // หากเกิดข้อผิดพลาดในการโหลด
+            console.error('Error fetching leaderboard:', error);
+            leaderboardList.innerHTML = '<li>เกิดข้อผิดพลาดในการโหลดข้อมูล</li>';
+        });
+}
 
         // --- EVENT LISTENERS ---
         startGameBtn.addEventListener('click', () => {
@@ -369,4 +391,5 @@
     </script>
 </body>
 </html>
+
 
